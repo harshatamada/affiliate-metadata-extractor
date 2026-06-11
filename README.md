@@ -23,3 +23,10 @@ Extract structured product information from e-commerce URLs.
   "brand": "...",
   "source": "jsonld"
 }
+## Installation
+
+pip install -r requirements.txt
+playwright install
+
+## Run
+python main.py
