@@ -4,53 +4,56 @@ from fetchers.playwright_fetcher import fetch_html_playwright
 from extractor import extract_product_data
 
 
-url = input("Enter normalized URL: ")
+import json
 
-print("\nTrying HTTPX...")
+def run_extraction(data):
 
-html = fetch_html(url)
-print("HTML is None:", html is None)
+    url = data["normalizedUrl"]
 
-if html:
-    print("HTML length:", len(html))
-    print("First 500 chars:")
-    print(html[:500])
+    
 
-blocked = False
+    html = fetch_html(url)
 
-if not html:
-    blocked = True
+    if html:
+        print("HTML length:", len(html))
 
-elif "<title>Robot Check</title>" in html:
-    blocked = True
+    blocked = False
 
-elif "sorry, we just need to make sure you're not a robot" in html.lower():
-    blocked = True
+    if not html:
+        blocked = True
 
-print("BLOCKED =", blocked)
+    elif "<title>Robot Check</title>" in html:
+        blocked = True
 
-if blocked:
+    elif "sorry, we just need to make sure you're not a robot" in html.lower():
+        blocked = True
 
-    print("\nTrying Playwright...")
+    print("BLOCKED =", blocked)
 
-    html = fetch_html_playwright(url)
+    if blocked:
 
+       
 
-if not html:
+        html = fetch_html_playwright(url)
 
-    print("Failed to fetch page")
+    if not html:
+        print("Failed to fetch page")
+        return None
 
-    exit()
+    product = extract_product_data(html)
 
+    # Fallback if extraction quality is poor
+    if (
+        product.get("product_name") == "Amazon.in"
+        or product.get("image") is None
+    ):
+        
 
-product = extract_product_data(html)
+        html = fetch_html_playwright(url)
 
-print("\nRESULT\n")
+        if html:
+            product = extract_product_data(html)
 
-print(product)
-with open(
-    "debug.html",
-    "w",
-    encoding="utf-8"
-) as f:
-    f.write(html)
+   
+
+    return product

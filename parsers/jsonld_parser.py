@@ -38,7 +38,10 @@ def parse_jsonld(html):
                     data.get("description"),
 
                     "image":
-                    data.get("image")
+                    data.get("image"),
+
+                    "price":
+                    data.get("offers", {}).get("price"),
                 }
 
         except:

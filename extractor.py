@@ -13,6 +13,7 @@ def extract_product_data(html):
             "description": jsonld.get("description"),
             "image": jsonld.get("image"),
             "brand": jsonld.get("brand"),
+            "price": jsonld.get("price"),
             "product_type": jsonld.get("@type"),
             "source": "jsonld"
         }
@@ -24,6 +25,7 @@ def extract_product_data(html):
      "description": metadata.get("description"),
      "image": metadata.get("image"),
      "brand": metadata.get("brand"),
+     "price": metadata.get("price"),
      "product_type": metadata.get("product_type"),
      "source": "metadata"
 }
